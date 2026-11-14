@@ -9,8 +9,9 @@ auditing — or already dead.
 It stitches together four technologies that were never meant to meet in one app:
 verified source from **Sourcify**, live on-chain state from public **EVM RPCs**,
 a battery of hand-written **static detectors** (TypeScript, no heavy tooling),
-and an **AI triage report** that ranks leads by severity with file:line,
-explanation, and a PoC direction for each.
+and a **triage report** that ranks leads by severity with file:line,
+explanation, and a PoC direction for each. (The verdict is rules-based, not
+an LLM call — the report says "lead", never "confirmed bug".)
 
 ## The problem
 

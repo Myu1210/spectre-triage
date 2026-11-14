@@ -17,10 +17,14 @@
   Verify: `eth_getBalance` + EIP-1967 implementation slot read for the Kiln
   pool proxy return plausible values.
 - [ ] 1.4 `lib/detectors/d1.ts` — mapping-key-mismatch detector, reimplemented
-  from `requirements.md` R2/D1 (do NOT copy the /tmp research prototype).
+  from `requirements.md` R2/D1 (do NOT copy the /tmp research prototype — it
+  was wiped with /tmp on VM replacement; re-derive from the requirements and
+  re-validate here). Fixtures in the local audit archive
+  `~/workspace/bug-bounty/kiln-v2/`: `vTreasury.sol` at
+  `src/impl/cub/treasury-impl/src/vTreasury.sol`, clean control `MultiPool.sol`
+  at `src/impl/lst-impl-a/src/MultiPool.sol` (do not ship fixtures).
   Verify: flags line ~155 in the real vTreasury source; 0 findings on the
-  MultiPool source (both files are in the local audit archive — use them as
-  fixtures, do not ship them).
+  MultiPool source.
 
 ## 2. Remaining detectors + verdict + report
 - [ ] 2.1 `lib/detectors/d2.ts`–`d10.ts` — one file per detector per R2.

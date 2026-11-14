@@ -49,14 +49,21 @@ file, line, explanation (why it matters), and PoC direction (how to prove it).
 - **R3.2** Findings sorted by severity, each expandable: title, severity badge,
   file:line, explanation, PoC direction.
 - **R3.3** A "live state" panel: implementation address, ETH balance, and the
-  three scope facts the detectors used.
+  scope facts the detectors used — i.e. the values read in R1.3 (proxy
+  implementation, ETH balance, `totalSupply`/`balanceOf` where applicable).
+  Only values actually read are shown.
 - **R3.4** Export report as Markdown (download button). The Markdown contains
   verdict, findings, and live-state facts — no invented data.
 
 ### R4 — Examples (one-click, no typing)
 - Preloaded: (a) Kiln vTreasury `0xA06634ed78C5121c2A3702b90b6E3926c7B2A641`
   (Ethereum — must surface the D1 HIGH), (b) a known-clean control contract
-  (must surface 0 HIGH findings), (c) one more real audited contract.
+  (must surface 0 HIGH findings) — a deployed, Sourcify-verified contract
+  chosen during the build and verified clean BEFORE the demo (the local
+  `MultiPool.sol` fixture is the unit-test control, not the on-chain
+  example; the chosen address + its expected 0-HIGH result are recorded in
+  `BUILD-LOG.md`), (c) one more real audited contract, same rule
+  (deployed + verified + expected result recorded before the demo).
   The example buttons fill the form AND run the analysis.
 
 ### R5 — States & quality

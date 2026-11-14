@@ -28,9 +28,10 @@ Browser (single page)
   with fallback order.
 - `lib/rpc.ts` — minimal JSON-RPC client (fetch, 8 s timeout, 1 retry).
 - `lib/detectors/` — one file per detector (D1–D10), each exporting
-  `detect(files, liveState) → Finding[]`. D1 follows the validated prototype
-  in `/tmp/spectre-prototype/detect.mjs` (research only — reimplement cleanly
-  from the requirements, do not copy-paste the prototype).
+  `detect(files, liveState) → Finding[]`. D1 is reimplemented from
+  `requirements.md` R2/D1 (the /tmp research prototype was wiped with /tmp
+  on VM replacement — do not look for it; re-derive from the requirements
+  and validate against the fixtures named in `tasks.md` 1.4).
 - `lib/verdict.ts` — verdict rules: any Critical/High → AUDIT (with a note
   that findings are leads, not confirmed bugs); unverified → SKIP; no findings
   above Low → SKIP (clean) with reason.
