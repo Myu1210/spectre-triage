@@ -1,0 +1,18 @@
+# Dependencies & build output
+node_modules/
+.next/
+out/
+dist/
+*.log
+
+# Deploy
+.vercel/
+
+# Env (no secrets in this repo — all reads are public, no keys needed)
+.env*.local
+
+# OS
+.DS_Store
+
+# IMPORTANT — Kiroween rule: NEVER ignore .kiro (specs, steering, hooks).
+# Adding .kiro to .gitignore can disqualify the submission.
