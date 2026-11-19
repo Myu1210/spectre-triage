@@ -1,0 +1,21 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "Typecheck on save",
+      "description": "Run the TypeScript compiler (no emit) whenever a source file under app/ or lib/ is saved, so type errors surface immediately.",
+      "trigger": "PostFileSave",
+      "matcher": "^(app|lib)/.*\\.(ts|tsx)$",
+      "action": { "type": "command", "command": "npx tsc --noEmit" },
+      "timeout": 120
+    },
+    {
+      "name": "Unit tests on save",
+      "description": "Run the vitest suite whenever a source file under app/ or lib/ is saved, so a broken detector or route is caught before the next step.",
+      "trigger": "PostFileSave",
+      "matcher": "^(app|lib)/.*\\.(ts|tsx)$",
+      "action": { "type": "command", "command": "npm test" },
+      "timeout": 120
+    }
+  ]
+}

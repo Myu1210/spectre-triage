@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { chainBySlug } from '@/lib/chain';
 import { fetchVerifiedSource } from '@/lib/sourcify';
-import { ethCall, getBalance, getImplementation } from '@/lib/rpc';
+import { ethCall, getBalance, getImplementation, isEip1967Proxy } from '@/lib/rpc';
 import { detect as detectD1 } from '@/lib/detectors/d1';
 import { detect as detectD2 } from '@/lib/detectors/d2';
 import { detect as detectD3 } from '@/lib/detectors/d3';
@@ -101,9 +101,13 @@ export async function POST(req: Request) {
   let liveState: LiveState;
   try {
     const paddedAddress = address.slice(2).toLowerCase().padStart(64, '0');
-    const [ethBalance, implementation, totalSupplyRaw, balanceOfRaw] = await Promise.all([
+    const [ethBalance, implementation, isProxy, totalSupplyRaw, balanceOfRaw] = await Promise.all([
       getBalance(chain, address),
       getImplementation(chain, address),
+      // Proxy-ness comes from the runtime code (EIP-1967 slot constant),
+      // NOT from the slot value: a zero slot means "uninitialized proxy"
+      // as well as "not a proxy", and D9 must tell them apart.
+      isEip1967Proxy(chain, address),
       ethCall(chain, address, TOTAL_SUPPLY_SELECTOR).catch(() => null),
       ethCall(chain, address, BALANCE_OF_SELECTOR + paddedAddress).catch(() => null),
     ]);
@@ -116,7 +120,7 @@ export async function POST(req: Request) {
       ethBalance,
       totalSupply,
       balanceOf,
-      isProxy: implementation !== null,
+      isProxy,
     };
   } catch (err) {
     console.error('RPC upstream failure:', err);

@@ -92,6 +92,39 @@ export async function getImplementation(chain: Chain, address: string): Promise<
   return '0x' + slot.slice(-40);
 }
 
+/** The EIP-1967 implementation-slot constant, without the 0x prefix. */
+const EIP1967_SLOT_HEX = EIP1967_IMPLEMENTATION_SLOT.slice(2);
+
+/**
+ * Pure check: does this contract's runtime code contain the EIP-1967
+ * implementation-slot constant? Transparent/UUPS proxies embed the slot
+ * constant in their bytecode (the delegatecall target is read from that
+ * slot), so its presence marks an EIP-1967 proxy independently of the slot
+ * VALUE — a proxy whose slot is still zero (uninitialized) still contains
+ * the constant. Case-insensitive; `0x` (no code) returns false.
+ */
+export function isEip1967ProxyCode(code: string): boolean {
+  if (typeof code !== 'string') return false;
+  return code.toLowerCase().includes(EIP1967_SLOT_HEX.toLowerCase());
+}
+
+/** Fetch the contract's runtime code (eth_getCode). */
+export async function getCode(chain: Chain, address: string): Promise<string> {
+  const result = await rpcCall(chain, 'eth_getCode', [address, 'latest']);
+  return asHexString(result, 'eth_getCode');
+}
+
+/**
+ * Is this contract an EIP-1967 proxy? Determined from the runtime code
+ * (see isEip1967ProxyCode), NOT from the slot value: getImplementation
+ * returns null both for a non-proxy and for a proxy whose slot is zero,
+ * so the slot value alone cannot tell them apart. D9 covers EIP-1967
+ * proxies only; EIP-1167 minimal proxies are out of scope.
+ */
+export async function isEip1967Proxy(chain: Chain, address: string): Promise<boolean> {
+  return isEip1967ProxyCode(await getCode(chain, address));
+}
+
 /** eth_call for a view function; `data` is the 4-byte selector + args. */
 export async function ethCall(
   chain: Chain,
