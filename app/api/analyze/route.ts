@@ -101,12 +101,16 @@ export async function POST(req: Request) {
   let liveState: LiveState;
   try {
     const paddedAddress = address.slice(2).toLowerCase().padStart(64, '0');
-    const [ethBalance, implementation, totalSupply, balanceOf] = await Promise.all([
+    const [ethBalance, implementation, totalSupplyRaw, balanceOfRaw] = await Promise.all([
       getBalance(chain, address),
       getImplementation(chain, address),
       ethCall(chain, address, TOTAL_SUPPLY_SELECTOR).catch(() => null),
       ethCall(chain, address, BALANCE_OF_SELECTOR + paddedAddress).catch(() => null),
     ]);
+    // An empty `0x` return means the call produced no data (not a token),
+    // which is "not applicable", not a zero value.
+    const totalSupply = totalSupplyRaw && totalSupplyRaw !== '0x' ? totalSupplyRaw : null;
+    const balanceOf = balanceOfRaw && balanceOfRaw !== '0x' ? balanceOfRaw : null;
     liveState = {
       implementation,
       ethBalance,

@@ -31,13 +31,13 @@ const EXAMPLES = [
     chain: "ethereum",
   },
   {
-    label: "WETH (control)",
-    address: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+    label: "Multicall3 (control)",
+    address: "0xcA11bde05977b3631167028862bE2a173976CA11",
     chain: "ethereum",
   },
   {
-    label: "USDC",
-    address: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+    label: "Chainlink ETH/USD feed",
+    address: "0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419",
     chain: "ethereum",
   },
 ];
@@ -340,7 +340,7 @@ export default function Home() {
               <section className="live-state" aria-label="Live state">
                 <h2>Live state</h2>
                 <dl>
-                  <dt>Proxy</dt>
+                  <dt>EIP-1967 proxy</dt>
                   <dd>{result.liveState.isProxy ? "yes" : "no"}</dd>
                   {result.liveState.implementation && (
                     <>
