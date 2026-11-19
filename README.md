@@ -34,22 +34,34 @@ ended in triage. Spectre automates the triage step.
 4. **Examples** — one-click preloaded contracts, including a known-vulnerable
    and a known-clean control.
 
-## Status (2026-11-14)
+## Status (2026-11-19)
 
-- ✅ Rules verified live from kiroween.devpost.com
-- ✅ Idea chosen (Frankenstein) + detector approach validated with a prototype
-  (flags the real Kiln vTreasury HIGH, 0 false positives on the clean sibling)
-- ✅ Kiro CLI 3.3.0 installed (`kiro-cli`)
-- ✅ Spec + steering written in `.kiro/specs/spectre/` (spec-driven build)
-- ⏳ BLOCKED on auth: Kiro sign-in + GitHub login (see below)
-- ⏳ App code not yet written — it will be written BY Kiro, from this spec
+- ✅ App built and verified: `npm test` 48/48, `npm run build` zero errors
+- ✅ Kiln vTreasury → D1 HIGH at `src/vTreasury.sol:155`; Multicall3 clean
+  control → 0 HIGH findings; Chainlink ETH/USD feed → 1× D3 High + 4× D7 Medium
+- ✅ Spec + steering + agent hook in `.kiro/` (see `BUILD-LOG.md` for the
+  full check log)
+- ⏳ Deploy BLOCKED on Vercel auth (no credentials in this environment;
+  `vercel login` is the entrant's step) — see `BUILD-LOG.md`
 
-## How to build (for Kiro)
+## How it was built (honest note)
+
+The spec, steering docs, and agent hook were authored in Kiro format and the
+build followed them — but the implementation itself was written by Muse, not
+by the Kiro CLI, because Kiro CLI login was blocked (device-flow
+safety-flagged, loopback OAuth unreachable from the cloud browser, and the
+entrant has no laptop). The Next.js scaffold is the standard `create-next-app`
+starter template. The detectors are hand-written TypeScript heuristics:
+rules-based triage, not an LLM, and every finding is a lead to verify, not a
+confirmed vulnerability — never a full audit.
+
+## How to run it
 
 ```bash
-cd spectre
-kiro-cli   # sign in first (GitHub / Google / AWS Builder ID)
-# then: implement .kiro/specs/spectre/tasks.md, in order, running the checks
+npm install
+npm test     # vitest suite (includes live RPC/Sourcify checks)
+npm run build
+npm start    # production server on http://localhost:3000
 ```
 
 ## Pass / fail checks (must ALL pass before demo)
