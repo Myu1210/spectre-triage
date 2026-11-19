@@ -296,12 +296,6 @@ export default function Home() {
             >
               <h2>{result.verdict === "AUDIT" ? "AUDIT" : "SKIP"}</h2>
               <p className="summary">{result.summary}</p>
-              {result.verdict === "AUDIT" && (
-                <p className="honesty">
-                  Findings are leads, not confirmed bugs — verify every lead before
-                  acting on it.
-                </p>
-              )}
               <p className="report-meta">
                 {result.address} · {result.chain} ·{" "}
                 {result.verified ? "source verified" : "source not verified"}
