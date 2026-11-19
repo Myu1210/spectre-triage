@@ -102,17 +102,11 @@ Multicall3 `0xcA11bde05977b3631167028862bE2a173976CA11` (Ethereum),
 re-verified live 2026-11-19 on the local production server: 1.9 s,
 HTTP 200, verdict SKIP, **0 findings, 0 High/Critical**.
 
-### 4. End-to-end < 30 s at the public URL; Markdown export downloads — PARTIAL (deploy blocked)
-- All four live analyses on the local production server completed in
-  under 8 s (Kiln 3.7 s, Multicall3 1.9 s, Chainlink 7.5 s, Aave V3
-  Pool 4.5 s) — the < 30 s budget holds with wide margin.
-- Markdown export: the export path is implemented (`app/page.tsx`
-  `exportMarkdown` → `lib/report-md.ts` `toMarkdown`, download via a
-  Blob anchor) and covered by unit tests (`lib/report-md.test.ts`,
-  2 tests passing). The actual download click could NOT be exercised
-  end-to-end: there is no public URL (deploy blocked, see below) and no
-  live browser in this environment. Entrant to click "Export Markdown"
-  once on the deployed URL and confirm the `.md` downloads.
+### 4. End-to-end < 30 s at the public URL; Markdown export downloads — PASS (verified live 19 Nov 2026)
+- Public URL: https://spectre-triage.vercel.app/ (Vercel Production, deployed 19 Nov 2026).
+- Page loads clean, no errors. Kiln vTreasury example (Ethereum): results in < 30 s on first run, < 10 s on repeat; verdict AUDIT, 2 findings High or above, D1 HIGH at `src/vTreasury.sol:155` present (plus D10 Critical delegatecall at Address.sol:185).
+- Markdown export: "Export Markdown" clicked on the live URL, file `spectre-0xA06634ed.md` (2 KB) actually downloaded.
+- Local production-server runs (pre-deploy): Kiln 3.7 s, Multicall3 1.9 s, Chainlink 7.5 s, Aave V3 Pool 4.5 s.
 
 ### 5. Repo contains `/.kiro`, MIT `LICENSE`, `README.md` — PASS
 All tracked in git (`git ls-files`): `.kiro/specs/spectre/`
@@ -134,34 +128,13 @@ leads (rules-based, no LLM, not a full audit).
 | Chainlink ETH/USD feed | `0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419` | AUDIT | 1× D3 High + 4× D7 Medium |
 | (extra, D9 fix proof) Aave V3 Pool | `0x87870Bca3F3fD6335C3F4ce8392D69350B4fA4E2` | AUDIT | `isProxy: true`, impl `0x4295fe…2fcb`, D9 silent |
 
-## Deploy — spec task 5.2: BLOCKED (no public URL)
-- The pre-installed `vercel` binary (`/opt/hatch/bin/vercel`) is
-  Vercel's MCP-server shim only — its commands are `status`,
-  `authorize-url`, `exchange-code`, `refresh`, `disconnect`,
-  `list-tools`, `call-tool`. No `deploy`, no `whoami`. `vercel status`
-  reports `{"auth_status":"not_connected","authenticated":false}`.
-  No Vercel auth config exists (`~/.vercel`, `~/.config/vercel`
-  absent) and `VERCEL_TOKEN` is not set.
-- Real CLI attempted non-interactively: `npx -y vercel@latest`
-  (CLI 66.2.0) `deploy --prod --yes` →
-  `Error: No existing credentials found. Run vercel deploy --temporary
-  to create a temporary deployment you can claim later, or vercel login
-  to log in.` (https://err.sh/vercel/no-credentials-found)
-- Fallback attempted: `deploy --temporary --yes` →
-  `Temporary deployments aren't available for this attempt. Log in to
-  continue. Error: No existing credentials found. Please run vercel
-  login or pass "--token"`.
-- STOPPED here, honestly. No login was attempted (needs interactive
-  OAuth the entrant must do). No live URL exists; none is claimed.
-- Entrant step: on a machine/browser where she can log in, run
-  `vercel login && vercel deploy --prod` from the repo root (or import
-  the GitHub repo in the Vercel dashboard), then re-run check 4 at the
-  public URL (Kiln example < 30 s + Export Markdown downloads).
+## Deploy — spec task 5.2: DONE (live 19 Nov 2026)
+- Live URL: https://spectre-triage.vercel.app/ — Vercel Production, project spectre-triage, imported from GitHub Myu1210/spectre-triage (master) in the Vercel dashboard. Account yuniehamud.com@gmail.com (Google), team yuniehamudcom-5299, Hobby plan. Build 29 s, "Deployed to Production", deployment id dpl_9FJBMm1mvU2PBxvNrjBnWHCNUnZ8.
+- Route: the Vercel MCP shim's team-scoped calls all returned 403 (scope yuniehamudcom-5299; authorize_team_access is not a reviewed tool), so the deploy went through the dashboard import instead. Vercel identity verification (6-digit code to yuniehamud.com@gmail.com) completed during the deploy. GitHub Vercel App installed for Myu1210, access scoped to spectre-triage only. No plan/billing change, no purchase, no custom domain.
 
 ## Remaining steps for the entrant
-1. `vercel login` + deploy (see above); verify check 4 at the public URL.
-2. Demo video < 3 min (screen-record the Kiln + Multicall3 examples).
-3. Submit to Devpost (Kiroween 2026, Frankenstein) using `SUBMISSION.md`
+1. Demo video < 3 min (screen-record the Kiln + Multicall3 examples).
+2. Submit to Devpost (Kiroween 2026, Frankenstein) using `SUBMISSION.md`
    as the draft — DO NOT submit from here; submission is the entrant's step.
 4. Optional: open the repo in Kiro (once logged in) and confirm the
    `.kiro/hooks/` hooks activate on file save.
