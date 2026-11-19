@@ -3,8 +3,7 @@
 > DRAFT — do not submit from here. Submission is the entrant's step.
 > Deadline: 4 Dec 2026 14:00 PT (5 Dec 2026 05:00 WIB).
 > Category: **Frankenstein**. Repo: https://github.com/Myu1210/spectre-triage
-> Live URL: **none yet — deploy is blocked on Vercel login (see below)**.
-> Update this file with the live URL once deployed.
+> Live URL: **https://spectre-triage.vercel.app/** (deployed 19 Nov 2026, Vercel Production).
 
 ## What it does
 
@@ -66,12 +65,11 @@ to verify, not a full audit.
 
 ## What's next
 
-Deploy the live URL (blocked only on Vercel login — the entrant's step),
-record the < 3 min demo video, and submit. Stretch goal (only after the
+Live URL is deployed; record the < 3 min demo video, and submit. Stretch goal (only after the
 checks pass): a Solana tab.
 
 ## Links
 
 - Repo: https://github.com/Myu1210/spectre-triage
-- Live demo: _pending Vercel login — see BUILD-LOG.md_
+- Live demo: https://spectre-triage.vercel.app/
 - License: MIT
